@@ -30,6 +30,7 @@ nobel <- read_csv("data/nobel.csv")
 
 1.  How many observations and how many variables are in the dataset? Use
     inline code to answer this question. What does each row represent?
+    935 obs 26 var
 
 ``` r
 dim(nobel)
@@ -37,7 +38,8 @@ dim(nobel)
 
     ## [1] 935  26
 
-Each row represents information about a nobel prize winner.
+observations is 935 varibles is 26 Each row represents information about
+a nobel prize winner.
 
 1.  Create a new data frame called `nobel_living` that filters for
 
