@@ -41,7 +41,7 @@ dim(nobel)
 observations is 935 varibles is 26 Each row represents information about
 a nobel prize winner.
 
-1.  Create a new data frame called `nobel_living` that filters for
+2.  Create a new data frame called `nobel_living` that filters for
 
 -   laureates for whom `country` is available
 -   laureates who are people as opposed to organizations (organizations
@@ -67,18 +67,32 @@ nrow(nobel_living)
 
     ## [1] 935
 
+``` r
+nobel_living <- nobel %>% filter(is.na(died_date) ,country!="NA" ,gender!="org")
+```
+
 ## Most living Nobel laureates were based in the US when they won their prizes
 
 Get the code from the Lab document
 
+``` r
+nobel_living <- nobel_living %>%
+  mutate(country_us = if_else(country == "USA", "USA", "other"))
+```
+
 Next, we will limit our analysis to only the following categories:
 Physics, Medicine, Chemistry, and Economics.
+
+``` r
+nobel_living_science <- nobel_living %>%
+filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+```
 
 Knit, *commit, and push your changes to GitHub with an appropriate
 commit message. Make sure to commit and push all changed files so that
 your Git pane is cleared up afterwards.d*
 
-1.  Create a faceted bar plot visualizing the relationship between the
+3.  Create a faceted bar plot visualizing the relationship between the
     category of prize and whether the laureate was in the US when they
     won the nobel prize. Interpret your visualization, and say a few
     words about whether the Buzzfeed headline is supported by the data.
@@ -94,7 +108,16 @@ your Git pane is cleared up afterwards.d*
 
 ## But of those US-based Nobel laureates, many were born in other countries
 
-1.  Create a new variable called `born_country_us` that has the value
+``` r
+nobel_living_science %>%
+ggplot(aes(x = country_us,y=category, fill =category)) +
+geom_bar(stat = "identity", position = "dodge") + 
+coord_flip()
+```
+
+![](lab-05_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+4.  Create a new variable called `born_country_us` that has the value
     `"USA"` if the laureate is born in the US, and `"Other"` otherwise.
     How many of the winners are born in the US?
 
@@ -102,7 +125,7 @@ Knit, *commit, and push your changes to GitHub with an appropriate
 commit message. Make sure to commit and push all changed files so that
 your Git pane is cleared up afterwards.d*
 
-1.  Add a second variable to your visualization from Exercise 3 based on
+5.  Add a second variable to your visualization from Exercise 3 based on
     whether the laureate was born in the US or not. Based on your
     visualization, do the data appear to support Buzzfeed’s claim?
     Explain your reasoning in 1-2 sentences.
@@ -118,7 +141,7 @@ Knit, *commit, and push your changes to GitHub with an appropriate
 commit message. Make sure to commit and push all changed files so that
 your Git pane is cleared up afterwards.*
 
-1.  In a single pipeline, filter for laureates who won their prize in
+6.  In a single pipeline, filter for laureates who won their prize in
     the US, but were born outside of the US, and then create a frequency
     table (with the `count()` function) for their birth country
     (`born_country`) and arrange the resulting data frame in descending
